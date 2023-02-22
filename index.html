@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" type="text/css" href="Orca/desktop/sources/links/main.css"/>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <script type="text/javascript">function require(name){ console.warn('Failed to require '+name) }</script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/lib/acels.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/lib/theme.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/lib/history.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/lib/source.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/library.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/operator.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/orca.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/transpose.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io/cc.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io/midi.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io/mono.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io/osc.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/core/io/udp.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/clock.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/commander.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/cursor.js"></script>
+    <script type="text/javascript" src="Orca/desktop/sources/scripts/client.js"></script>
+    <script type="text/javascript" src="scripts/lib/tone.js"></script>
+    <script type="text/javascript" src="scripts/kit.js"></script>
+    <script type="text/javascript" src="scripts/knob.js"></script>
+    <script type="text/javascript" src="scripts/mixer.js"></script>
+    <script type="text/javascript" src="scripts/rack.js"></script>
+    <script type="text/javascript" src="scripts/orca_play.js"></script>
+    <title>Orca Play</title>
+  </head>
+  <body>
+    <script>
+      'use strict'
+
+      const client = new Client()
+      const orcaPlay = new OrcaPlay(client)
+
+      client.install(document.body)
+      orcaPlay.install(document.body)
+
+      window.addEventListener('load', () => {
+        client.start()
+        orcaPlay.start()
+        window.orcaClient = client;
+        window.orcaPlay = orcaPlay;
+      })
+
+      // Register PWA Service Worker
+      if (location.protocol.substr(0,4) !== ('file') && 'serviceWorker' in navigator) {
+        try { navigator.serviceWorker.register('sw.js') } catch (err) { console.warn(err) }
+      }
+    </script>
+    <noscript>Your browser must have Javascript enabled to use Orca, <br />try running the <a href='https://git.sr.ht/~rabbits/orca'>terminal version</a> instead.</noscript>
+  </body>
+</html>
