@@ -25,10 +25,10 @@ const assets = [
   './Orca/desktop/sources/scripts/cursor.js',
   './Orca/desktop/sources/scripts/client.js',
   './scripts//lib/tone.js',
-  './scripts/enfer/kit.js',
-  './scripts/enfer/knob.js',
-  './scripts/enfer/mixer.js',
-  './scripts/enfer/rack.js',
+  './scripts/kit.js',
+  './scripts/knob.js',
+  './scripts/mixer.js',
+  './scripts/rack.js',
   './scripts/orca_play.js'
 ]
 
