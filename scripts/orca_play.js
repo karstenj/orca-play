@@ -2,12 +2,9 @@
 
 function OrcaPlay (client) {
     this.el = document.createElement('div')
+    this.el.id = 'orcaplay'
   
     this.acels = client.acels
-   
-    this.rack = new Rack(this)
-    this.mixer = new Mixer(this)
-  
     this.channel = 0
 
     const enferBridge = {
@@ -20,7 +17,8 @@ function OrcaPlay (client) {
     client.io.midi.outputDevice = () => enferBridge;
   
     this.install = (host = document.body) => {
-      host.appendChild(this.el)
+      this.rack = new Rack(this)
+      this.mixer = new Mixer(this)
       /*this.acels.set('Play', 'Test Midi', 'X', () => { this.rack.play(this.channel, 0) })
       this.acels.set('Play', 'Test Midi', 'C', () => { this.rack.play(this.channel, 1) })
       this.acels.set('Play', 'Test Midi', 'V', () => { this.rack.play(this.channel, 2) })
@@ -43,6 +41,7 @@ function OrcaPlay (client) {
   
       this.mixer.install(this.el)
       this.rack.install(this.el)
+      host.appendChild(this.el)
     }
   
     this.start = (bpm = 120) => {
