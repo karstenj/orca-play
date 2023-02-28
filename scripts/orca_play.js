@@ -1,74 +1,53 @@
 'use strict'
 
-function OrcaPlay (client) {
-    this.el = document.createElement('div')
-  
-    this.acels = client.acels
-   
-    this.rack = new Rack(this)
-    this.mixer = new Mixer(this)
-  
-    this.channel = 0
+function OrcaPlay () {
+    const { orcaClient, Operator } = document.getElementById('orca-iframe').contentWindow;
+    const { pilotClient } = document.getElementById('pilot-iframe').contentWindow;
 
-    const enferBridge = {
-        send: (msg) => {
-          this.onMessage({ data: msg });
-        },
-        name: 'enferBridge',
-      };
-    
-    client.io.midi.outputDevice = () => enferBridge;
-  
+    this.orcaClient = orcaClient
+    this.pilotClient = pilotClient
+    this.io = new IOWrapper(this)
+    const orcaPlay = this
+
     this.install = (host = document.body) => {
-      host.appendChild(this.el)
-      /*this.acels.set('Play', 'Test Midi', 'X', () => { this.rack.play(this.channel, 0) })
-      this.acels.set('Play', 'Test Midi', 'C', () => { this.rack.play(this.channel, 1) })
-      this.acels.set('Play', 'Test Midi', 'V', () => { this.rack.play(this.channel, 2) })
-      this.acels.set('Play', 'Test Midi', 'Z', () => { this.rack.play(this.channel, 3) })
-      this.acels.set('Play', 'Test Midi', 'S', () => { this.rack.play(this.channel, 4) })
-      this.acels.set('Play', 'Test Midi', 'D', () => { this.rack.play(this.channel, 5) })
-      this.acels.set('Play', 'Test Midi', 'F', () => { this.rack.play(this.channel, 6) })
-      this.acels.set('Play', 'Test Midi', 'G', () => { this.rack.play(this.channel, 7) })
-      this.acels.set('Play', 'Test Midi', 'E', () => { this.rack.play(this.channel, 8) })
-      this.acels.set('Play', 'Test Midi', 'R', () => { this.rack.play(this.channel, 9) })
-      this.acels.set('Play', 'Test Midi', 'T', () => { this.rack.play(this.channel, 10) })
-      this.acels.set('Play', 'Test Midi', 'Y', () => { this.rack.play(this.channel, 11) })
-      this.acels.set('Play', 'Test Midi', '4', () => { this.rack.play(this.channel, 12) })
-      this.acels.set('Play', 'Test Midi', '5', () => { this.rack.play(this.channel, 13) })
-      this.acels.set('Play', 'Test Midi', '6', () => { this.rack.play(this.channel, 14) })
-      this.acels.set('Play', 'Test Midi', '7', () => { this.rack.play(this.channel, 15) })
-  
-      this.acels.set('Play', 'Next', ']', () => { this.modChannel(1) })
-      this.acels.set('Play', 'Prev', '[', () => { this.modChannel(-1) })*/
-  
-      this.mixer.install(this.el)
-      this.rack.install(this.el)
+      this.io.install(host)
     }
   
     this.start = (bpm = 120) => {
-      console.info('Enfer', 'Starting..')
-      console.info(`${this.acels}`)
-      this.mixer.setBpm(bpm)
-     }
-  
-    this.modChannel = (mod) => {
-      this.channel += mod
-      this.channel = this.channel % 16
-      console.log('Enfer Channel', this.channel)
+      console.info('OrcaPlay', 'Starting..')
+      this.io.start()
     }
 
-    this.onMessage = (msg) => {
-        if (msg.data[0] >= 144 && msg.data[0] < 160) {
-          const ch = msg.data[0] - 144
-          const pad = msg.data[1] - 24
-          const vel = msg.data[2]
-          this.rack.play(ch, pad, vel)
-        } else if (msg.data[0] >= 176 && msg.data[0] < 184) {
-          const ch = msg.data[0] - 176
-          const knob = msg.data[1] - 1
-          const vel = msg.data[2]
-          this.mixer.tweak(ch, knob, vel)
+    orcaClient.library[';'] = function OperatorPilot (orca, x, y, passive) {
+      Operator.call(this, orca, x, y, ';', true)
+    
+      this.name = 'pilot'
+      this.info = 'Sends to pilot'
+    
+      this.operation = function (force = false) {
+        let msg = ''
+        for (let x = 1; x <= 36; x++) {
+          const g = orca.glyphAt(this.x + x, this.y)
+          orca.lock(this.x + x, this.y)
+          if (g === '.') { break }
+          msg += g
         }
-    }    
+    
+        if (msg.length < 3) { return }
+        if (!this.hasNeighbor('*') && force === false) { return }
+    
+        this.draw = false
+        orcaPlay.io.io_pilot.push(msg)
+    
+        if (force === true) {
+          orcaPlay.io.io_pilot.run()
+        }
+      }
+    }
 }
   
+window.onload = () => {
+  const orcaPlay = new OrcaPlay()
+  orcaPlay.install(document.body)
+  orcaPlay.start()
+};

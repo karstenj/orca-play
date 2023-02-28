@@ -1,0 +1,42 @@
+#orca.create {
+  top: 0px;
+  max-width: 85%;
+  width: 85%;
+  height: 100%;
+}
+
+#orca {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+  max-width: 85%;
+  height: 100%;
+  width: 85%;
+}
+
+#orca > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#pilot {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  padding: 0px;
+  margin: 0px;
+  max-width: 15%;
+  height: 100%;
+  width: 15%;
+  margin: auto;
+  display: inline;
+}
+
+#pilot > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

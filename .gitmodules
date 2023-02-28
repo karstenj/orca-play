@@ -1,3 +1,7 @@
 [submodule "Orca"]
 	path = Orca
 	url = https://github.com/karstenj/Orca.git
+	
+[submodule "Pilot"]
+	path = Pilot
+	url = https://github.com/karstenj/Pilot.git
