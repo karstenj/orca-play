@@ -1,34 +1,42 @@
-.hidden { display: none; }
+#orca.create {
+  top: 0px;
+  max-width: 85%;
+  width: 85%;
+  height: 100%;
+}
 
-/* knob styles */
-#mixer { width: 408px;font-size: 12px; margin: calc(50vh - 140px) auto;display: inline;  }
-.knob { float: left;width: 100px;height: 140px; position: relative; border-bottom: 2px solid white; margin-right:2px;}
-.knob svg { padding:10px; stroke-width:10px; transform: rotate(90deg); stroke-linecap: round; fill:none; margin: 10px auto;display: block; position: relative;}
-.knob svg circle.bg { stroke:#fff; stroke-width:7px; }
-.knob svg circle.fg { stroke:#000; stroke-width:4px; }
-.knob span { display: block }
-.knob span.display { color: #fff;position: absolute;top: 44px;width: 100px;text-align: center;font-size: 10px; }
-.knob span.label { color: #555;position: absolute;top: 90px;width: 100px;text-align: center;font-size: 10px; }
-.knob input { display: none; position: absolute; bottom: 10px }
-.knob:hover input { display: block }
+#orca {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  padding: 0px;
+  margin: 0px;
+  max-width: 85%;
+  height: 100%;
+  width: 85%;
+}
 
-#orcaplay {
+#orca > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#pilot {
   position: fixed;
   bottom: 0px;
   right: 0px;
   padding: 0px;
   margin: 0px;
-  max-width: 50%;
-  height: 160px;
-  width: 50%;
+  max-width: 15%;
+  height: 100%;
+  width: 15%;
   margin: auto;
-  display: none;
+  display: inline;
 }
 
-/* Theme */
-.knob { border-bottom-color: var(--b_low) }
-.knob:hover { border-bottom-color: var(--b_inv) }
-.knob svg circle.bg { stroke: var(--b_med) }
-.knob svg circle.fg { stroke: var(--f_high) }
-.knob span.display { color: var(--f_high); }
-.knob span.label { color: var(--f_med); }
+#pilot > iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
