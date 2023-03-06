@@ -21,8 +21,8 @@ function OrcaPlay () {
     orcaClient.library[';'] = function OperatorPilotNote (orca, x, y, passive) {
       Operator.call(this, orca, x, y, ';', true)
     
-      this.name = 'pilot note'
-      this.info = 'Sends PILOT note'
+      this.name = 'pilot synth'
+      this.info = 'PILOT synth'
     
       this.operation = function (force = false) {
         let msg = ''
@@ -47,8 +47,8 @@ function OrcaPlay () {
     orcaClient.library['='] = function OperatorPilotEffect (orca, x, y, passive) {
       Operator.call(this, orca, x, y, ';', true)
     
-      this.name = 'pilot effect'
-      this.info = 'Sends PILOT effect/drum'
+      this.name = 'pilot effect/drum'
+      this.info = 'PILOT effect/drum'
     
       this.operation = function (force = false) {
         let msg = ''
@@ -59,7 +59,7 @@ function OrcaPlay () {
           msg += g
         }
     
-        if (msg.length < 3) { return }
+        if (msg.length < 2) { return }
         if (!this.hasNeighbor('*') && force === false) { return }
     
         this.draw = false
