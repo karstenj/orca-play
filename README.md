@@ -1,31 +1,25 @@
-# ORCΛ
+# ORCΛ PLΛY
 
-<img src="https://raw.githubusercontent.com/hundredrabbits/100r.co/master/media/content/characters/orca.hello.png" width="300"/>
+[OrcaPlay](https://karstenj.github.io/orca-play/) is a combination of the [esoteric programming language](https://en.wikipedia.org/wiki/Esoteric_programming_language) [Orca](https://github.com/hundredrabbits/orca) and the synthersizer companion app [Pilot](https://github.com/hundredrabbits/pilot) with some extensions.
 
-Orca is an [esoteric programming language](https://en.wikipedia.org/wiki/Esoteric_programming_language) designed to quickly create procedural sequencers, in which every letter of the alphabet is an operation, where lowercase letters operate on bang, uppercase letters operate each frame.
-
-This application **is not a synthesizer, but a livecoding environment** capable of sending MIDI, OSC & UDP to your audio/visual interfaces, like Ableton, Renoise, VCV Rack or SuperCollider.
-
-If you need **help**, visit the [chatroom](https://talk.lurk.org/channel/orca), join the [forum](https://llllllll.co/t/orca-live-coding-tool/17689) or watch an [tutorial](https://www.youtube.com/watch?v=ktcWOLeWP-g).
-
-- [Download builds](https://hundredrabbits.itch.io/orca), available for **Linux, Windows and OSX**.
-- Use [in your browser](https://hundredrabbits.github.io/Orca/), requires **webMidi**.
-- Use [in a terminal](https://git.sr.ht/~rabbits/orca), written in C.
-- Use [on small computers](https://git.sr.ht/~rabbits/orca-toy), written in assembly.
-- Use [on the Monome Norns](https://llllllll.co/t/orca/22492), written in Lua.
+This application is a synthesizer and a livecoding environment capable of playing synths and samples by [ToneJS](https://tonejs.github.io/) and sending MIDI to your audio/visual interfaces, like Ableton, Renoise, VCV Rack or SuperCollider.
 
 ## Install & Run
 
+### Run in Browser
+[OrcaPlay](https://karstenj.github.io/orca-play/)
+
+### Run in Electron
 If you wish to use Orca inside of [Electron](https://electronjs.org/), follow these steps:
 
 ```
-git clone https://github.com/hundredrabbits/Orca.git
-cd Orca/desktop/
+git clone https://github.com/karstenj/orca-play.git
+git submodule init
+git submodule update
+cd orca-play/desktop/
 npm install
 npm start
 ```
-
-<img src='https://raw.githubusercontent.com/hundredrabbits/Orca/master/resources/preview.jpg' width="600"/>
 
 ## Operators
 
@@ -66,69 +60,23 @@ To display the list of operators inside of Orca, use `CmdOrCtrl+G`.
 - `%` **mono**(channel octave note velocity length): Sends monophonic MIDI note.
 - `!` **cc**(channel knob value): Sends MIDI control change.
 - `?` **pb**(channel value): Sends MIDI pitch bench.
-- `;` **udp**: Sends UDP message.
-- `=` **osc**(*path*): Sends OSC message.
+- `;` **pilot**(channel value): Sends Pilot note.
+- `=` **pilot**(channel value): Sends Pilot effect/sample.
 - `$` **self**: Sends [ORCA command](#Commands).
+
+## Pilot Synthesizer/Sampler/Player
+Pilot has 17 synthesizer voices, 13 sampler voices, 13 drum banks with 16 drum samples and 8 effects.
 
 ## MIDI
 
-The [MIDI](https://en.wikipedia.org/wiki/MIDI) operator `:` takes up to 5 inputs('channel, 'octave, 'note, velocity, length). 
-
-For example, `:25C`, is a **C note, on the 5th octave, through the 3rd MIDI channel**, `:04c`, is a **C# note, on the 4th octave, through the 1st MIDI channel**. Velocity is an optional value from `0`(0/127) to `g`(127/127). Note length is the number of frames during which a note remains active. See it in action with [midi.orca](https://git.sr.ht/~rabbits/orca-examples/tree/master/basics/_midi.orca).
-
-## MIDI MONO
-
-The [MONO](https://en.wikipedia.org/wiki/Monophony) operator `%` takes up to 5 inputs('channel, 'octave, 'note, velocity, length). 
-
-This operator is very similar to the default Midi operator, but **each new note will stop the previously playing note**, would its length overlap with the new one. Making certain that only a single note is ever played at once, this is ideal for monophonic analog synthesisers that might struggle to dealing with chords and note overlaps.
-
-## MIDI CC
-
-The [MIDI CC](https://www.sweetwater.com/insync/continuous-controller/) operator `!` takes 3 inputs('channel, 'knob, 'value).
-
-It sends a value **between 0-127**, where the value is calculated as a ratio of 36, over a maximum of 127. For example, `!008`, is sending **28**, or `(8/36)*127` through the first channel, to the control mapped with `id0`. You can press **enter**, with the `!` operator selected, to assign it to a controller. By default, the operator sends to `CC64` [and up](https://nickfever.com/Music/midi-cc-list), the offset can be changed with the [command](#commands) `cc:0`, to set the offset to 0.
-
-## MIDI PITCHBEND
-
-The [MIDI PB](https://www.sweetwater.com/insync/pitch-bend/) operator `?` takes 3 inputs('channel, 'lsb, 'msb).
-
-It sends two different values **between 0-127**, where the value is calculated as a ratio of 36, over a maximum of 127. For example, `?008`, is sending an MSB of **28**, or `(8/36)*127` and an LSB of 0 through the first midi channel.
-
-## MIDI BANK SELECT / PROGRAM CHANGE
-
-This is a command (see below) rather than an operator and it combines the [MIDI program change and bank select functions](https://www.sweetwater.com/sweetcare/articles/6-what-msb-lsb-refer-for-changing-banks-andprograms/). 
-
-The syntax is `pg:channel;msb;lsb;program`. Channel is 0-15, msb/lsb/program are 0-127, but program will automatically be translated to 1-128 by the MIDI driver. `program` typically corresponds to a "patch" selection on a synth. Note that `msb` may also be identified as "bank" and `lsb` as "sub" in some applications (like Ableton Live). 
-
-`msb` and `lsb` can be left blank if you only want to send a simple program change. For example, `pg:0;;;63` will set the synth to patch number 64 (without changing the bank)
-
-## UDP
-
-The [UDP](https://nodejs.org/api/dgram.html#dgram_socket_send_msg_offset_length_port_address_callback) operator `;` locks each consecutive eastwardly ports. For example, `;hello`, will send the string "hello", on bang, to the port `49160` on `localhost`. In commander, use `udp:7777` to select the **custom UDP port 7777**, and `ip:127.0.0.12` to change the target IP. UDP is not available in the browser version of Orca.
-
-You can use the [listener.js](https://github.com/hundredrabbits/Orca/blob/master/resources/listener.js) to test UDP messages. See it in action with [udp.orca](https://git.sr.ht/~rabbits/orca-examples/tree/master/basics/_udp.orca).
-
-## OSC
-
-The [OSC](https://github.com/MylesBorins/node-osc) operator `=` locks each consecutive eastwardly ports. The first character is used for the path, the following characters are sent as integers using the [base36 Table](https://github.com/hundredrabbits/Orca#base36-table). In commander, use `osc:7777` to select the **custom OSC port 7777**, and `ip:127.0.0.12` to change the target IP. OSC is not available in the browser version of Orca.
-
-For example, `=1abc` will send `10`, `11` and `12` to `/1`, via the port `49162` on `localhost`; `=a123` will send `1`, `2` and `3`, to the path `/a`. You can use the [listener.js](https://github.com/hundredrabbits/Orca/blob/master/resources/listener.js) to test OSC messages. See it in action with [osc.orca](https://git.sr.ht/~rabbits/orca-examples/tree/master/basics/_osc.orca) or try it with [SonicPi](https://github.com/hundredrabbits/Orca/blob/master/resources/TUTORIAL.md#sonicpi).
-
-<img src='https://raw.githubusercontent.com/hundredrabbits/Orca/master/resources/preview.hardware.jpg' width="600"/>
-
+See description in [Orca](https://github.com/hundredrabbits/orca)
 ## Advanced Controls
 
-Some of Orca's features can be **controlled externally** via UDP though port `49160`, or via its own command-line interface. To activate the command-line prompt, press `CmdOrCtrl+K`. The prompt can also be used to inject patterns or change settings.
+Some of Orca's features can be controlled via its own command-line interface. To activate the command-line prompt, press `CmdOrCtrl+K`. The prompt can also be used to inject patterns or change settings.
 
 ### Project Mode
 
 You can **quickly inject orca files** into the currently active file, by using the command-line prompt — Allowing you to navigate across multiple files like you would a project. Press `CmdOrCtrl+L` to load multiple orca files, then press `CmdOrCtrl+B` and type the name of a loaded `.orca` file to inject it.
-
-### Default Ports
-
-| UDP Input  | OSC Input  | UDP Output | OSC Output |
-| ---------- | ---------- | ---------- | -----------|
-| 49160      | None       | 49161      | 49162
 
 ### Commands
 
@@ -176,29 +124,14 @@ The midi operator interprets any letter above the chromatic scale as a transpose
 | **O** | **P** | **Q** | **R** | **S** | **T** | **U** | **V** | **W** | **X** | **Y** | **Z**  | 
 | A1    | B1    | C2    | D2    | E2    | F2    | G2    | A2    | B2    | C3    | D3    | E3     | 
 
-## Companion Applications
-
-- [Pilot](https://github.com/hundredrabbits/pilot), a companion synth tool.
-- [Aioi](https://github.com/MAKIO135/aioi), a companion to send complex OSC messages.
-- [Estra](https://github.com/kyleaedwards/estra), a companion sampler tool.
-- [Gull](https://github.com/qleonetti/gull), a companion sampler, slicer and synth tool.
-- [Sonic Pi](https://in-thread.sonic-pi.net/t/using-orca-to-control-sonic-pi-with-osc/2381/), a livecoding environment.
-- [Remora](https://github.com/martinberlin/Remora), a ESP32 Led controller firmware.
-
 ## Links
 
 - [Overview Video](https://www.youtube.com/watch?v=RaI_TuISSJE)
 - [Orca Podcast](https://futureofcoding.org/episodes/045)
-- [Ableton & Unity3D](https://www.elizasj.com/unity_live_orca/)
-- [Japanese Tutorial](https://qiita.com/rucochanman/items/98a4ea988ae99e04b333)
-- [German Tutorial](http://tropone.de/2019/03/13/orca-ein-sequenzer-der-kryptischer-nicht-aussehen-kann-und-ein-versuch-einer-anleitung/)
-- [French Tutorial](http://makingsound.fr/blog/orca-sequenceur-modulaire/)
 - [Examples & Templates](https://git.sr.ht/~rabbits/orca-examples)
 
 ## Extras
 
 - This application supports the [Ecosystem Theme](https://github.com/hundredrabbits/Themes).
-- Download and share your patches on [PatchStorage](http://patchstorage.com/platform/orca/).
-- Support this project through [Patreon](https://patreon.com/100).
 - See the [License](LICENSE.md) file for license rights and limitations (MIT).
 - Pull Requests are welcome!
