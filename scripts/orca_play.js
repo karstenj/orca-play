@@ -18,11 +18,11 @@ function OrcaPlay () {
       this.io.start()
     }
 
-    orcaClient.library[';'] = function OperatorPilot (orca, x, y, passive) {
+    orcaClient.library[';'] = function OperatorPilotNote (orca, x, y, passive) {
       Operator.call(this, orca, x, y, ';', true)
     
-      this.name = 'pilot'
-      this.info = 'Sends to pilot'
+      this.name = 'pilot note'
+      this.info = 'Sends PILOT note'
     
       this.operation = function (force = false) {
         let msg = ''
@@ -37,10 +37,36 @@ function OrcaPlay () {
         if (!this.hasNeighbor('*') && force === false) { return }
     
         this.draw = false
-        orcaPlay.io.io_pilot.push(msg)
+        orcaPlay.io.io_pilot.push_note(msg)
     
         if (force === true) {
-          orcaPlay.io.io_pilot.run()
+          orcaPlay.io.io_pilot.run_note()
+        }
+      }
+    }
+    orcaClient.library['='] = function OperatorPilotEffect (orca, x, y, passive) {
+      Operator.call(this, orca, x, y, ';', true)
+    
+      this.name = 'pilot effect'
+      this.info = 'Sends PILOT effect/drum'
+    
+      this.operation = function (force = false) {
+        let msg = ''
+        for (let x = 1; x <= 36; x++) {
+          const g = orca.glyphAt(this.x + x, this.y)
+          orca.lock(this.x + x, this.y)
+          if (g === '.') { break }
+          msg += g
+        }
+    
+        if (msg.length < 3) { return }
+        if (!this.hasNeighbor('*') && force === false) { return }
+    
+        this.draw = false
+        orcaPlay.io.io_pilot.push_effect(msg)
+    
+        if (force === true) {
+          orcaPlay.io.io_pilot.run_effect()
         }
       }
     }

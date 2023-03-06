@@ -1,10 +1,3 @@
-#orca.create {
-  top: 0px;
-  max-width: 85%;
-  width: 85%;
-  height: 100%;
-}
-
 #orca {
   position: fixed;
   top: 0px;
@@ -24,14 +17,13 @@
 
 #pilot {
   position: fixed;
-  bottom: 0px;
+  top: 0px;
   right: 0px;
   padding: 0px;
   margin: 0px;
-  max-width: 15%;
+  max-width: 20%;
   height: 100%;
-  width: 15%;
-  margin: auto;
+  width: 16%;
   display: inline;
 }
 
