@@ -12,7 +12,7 @@ function OrcaPlay () {
     this.install = (host = document.body) => {
       this.io.install(host)
     }
-  
+
     this.start = (bpm = 120) => {
       console.info('OrcaPlay', 'Starting..')
       this.io.start()
@@ -22,7 +22,7 @@ function OrcaPlay () {
       Operator.call(this, orca, x, y, ';', true)
     
       this.name = 'pilot synth'
-      this.info = 'PILOT synth'
+      this.info = 'PILOT synth/sampler'
     
       this.operation = function (force = false) {
         let msg = ''
