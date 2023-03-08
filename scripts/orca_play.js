@@ -12,17 +12,58 @@ function OrcaPlay () {
 
     this.install = (host = document.body) => {
       const infoClose = document.getElementById('info-close');      
-      const infoContainer = document.getElementById('info-container');      
+      const infoContainer = document.getElementById('info-container');     
+      const infoContent = document.getElementById('info-content'); 
       infoClose.addEventListener('click', () => {
         infoContainer.classList.add('hidden');
         infoContainer.classList.remove('flex');
       })
+      const acclsInfo = document.createElement('div')
+      this.renderAccels(acclsInfo)
+      infoContent.appendChild(acclsInfo)
       this.io.install(host)
     }
 
     this.start = (bpm = 120) => {
       console.info('OrcaPlay', 'Starting..')
       this.io.start()
+    }
+
+    this.renderAccels = (acclsInfo) => {
+      const head = document.createElement('h2')
+      head.innerHTML = 'Accelerators'
+      acclsInfo.appendChild(head)
+      const table = document.createElement('table')
+      acclsInfo.appendChild(table)
+      const thead = document.createElement('thead')
+      table.appendChild(thead)
+      var row = document.createElement('tr')
+      thead.appendChild(row)
+      var col = document.createElement('th')
+      col.innerHTML = 'Key'
+      row.appendChild(col)
+      col = document.createElement('th')
+      col.innerHTML = 'Function'
+      row.appendChild(col)
+      const tbody = document.createElement('tbody')
+      table.appendChild(tbody)
+      const cats = this.orcaClient.acels.sort()
+      let text = ''
+      for (const cat in cats) {
+        text += `\n### ${cat}\n\n`
+        for (const item of cats[cat]) {
+          if (item.accelerator) {
+            row = document.createElement('tr')
+            tbody.appendChild(row)
+            col = document.createElement('td')
+            col.innerHTML = item.accelerator.replace('`', 'tilde')
+            row.appendChild(col)
+            col = document.createElement('td')
+            col.innerHTML = item.name
+            row.appendChild(col)
+          }
+        }
+      }
     }
 
     orcaClient.library[';'] = function OperatorPilotNote (orca, x, y, passive) {
