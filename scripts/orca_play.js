@@ -4,12 +4,19 @@ function OrcaPlay () {
     const { orcaClient, Operator } = document.getElementById('orca-iframe').contentWindow;
     const { pilotClient } = document.getElementById('pilot-iframe').contentWindow;
 
+
     this.orcaClient = orcaClient
     this.pilotClient = pilotClient
     this.io = new IOWrapper(this)
     const orcaPlay = this
 
     this.install = (host = document.body) => {
+      const infoClose = document.getElementById('info-close');      
+      const infoContainer = document.getElementById('info-container');      
+      infoClose.addEventListener('click', () => {
+        infoContainer.classList.add('hidden');
+        infoContainer.classList.remove('flex');
+      })
       this.io.install(host)
     }
 
