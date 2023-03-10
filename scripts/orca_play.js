@@ -18,10 +18,17 @@ function OrcaPlay () {
         infoContainer.classList.add('hidden');
         infoContainer.classList.remove('flex');
       })
+      const head = document.createElement('h1')
+      head.innerHTML = 'ORCΛ PLΛY'
+      infoContent.appendChild(head)
+      const guideInfo = document.createElement('div')
+      this.renderGuide(guideInfo)
+      infoContent.appendChild(guideInfo)
       const acclsInfo = document.createElement('div')
       this.renderAccels(acclsInfo)
       infoContent.appendChild(acclsInfo)
       this.io.install(host)
+      host.appendChild(this.orcaClient.theme.el)
     }
 
     this.start = (bpm = 120) => {
@@ -29,11 +36,47 @@ function OrcaPlay () {
       this.io.start()
     }
 
+    this.renderGuide = (guideInfo) => {
+      const head = document.createElement('h2')
+      head.innerHTML = 'Operators'
+      guideInfo.appendChild(head)
+      const table = document.createElement('table')
+      table.classList.add('table')
+      guideInfo.appendChild(table)
+      const thead = document.createElement('thead')
+      table.appendChild(thead)
+      var row = document.createElement('tr')
+      thead.appendChild(row)
+      var col = document.createElement('th')
+      col.innerHTML = 'Operator'
+      row.appendChild(col)
+      col = document.createElement('th')
+      col.innerHTML = 'Description'
+      row.appendChild(col)
+      const tbody = document.createElement('tbody')
+      table.appendChild(tbody)
+      const operators = Object.keys(this.orcaClient.library).filter((val) => { return isNaN(val) })
+      for (const id in operators) {
+        const key = operators[id]
+        const oper = new this.orcaClient.library[key]()
+        const text = oper.info
+        row = document.createElement('tr')
+        tbody.appendChild(row)
+        col = document.createElement('td')
+        col.innerHTML = key
+        row.appendChild(col)
+        col = document.createElement('td')
+        col.innerHTML = text
+        row.appendChild(col)
+  }
+    }
+
     this.renderAccels = (acclsInfo) => {
       const head = document.createElement('h2')
       head.innerHTML = 'Accelerators'
       acclsInfo.appendChild(head)
       const table = document.createElement('table')
+      table.classList.add('table')
       acclsInfo.appendChild(table)
       const thead = document.createElement('thead')
       table.appendChild(thead)
@@ -48,9 +91,7 @@ function OrcaPlay () {
       const tbody = document.createElement('tbody')
       table.appendChild(tbody)
       const cats = this.orcaClient.acels.sort()
-      let text = ''
       for (const cat in cats) {
-        text += `\n### ${cat}\n\n`
         for (const item of cats[cat]) {
           if (item.accelerator) {
             row = document.createElement('tr')
