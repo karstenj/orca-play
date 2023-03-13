@@ -28,7 +28,9 @@ function OrcaPlay () {
       this.renderAccels(acclsInfo)
       infoContent.appendChild(acclsInfo)
       this.io.install(host)
-      host.appendChild(this.orcaClient.theme.el)
+      infoContainer.classList.add('flex');
+      infoContainer.classList.remove('hidden');
+    host.appendChild(this.orcaClient.theme.el)
     }
 
     this.start = (bpm = 120) => {
