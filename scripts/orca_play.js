@@ -26,13 +26,9 @@ function OrcaPlay () {
     head.innerHTML = 'ORCΛ PLΛY'
     infoContent.appendChild(head)
     // render guide
-    const guideInfo = document.createElement('div')
-    this.renderGuide(guideInfo)
-    infoContent.appendChild(guideInfo)
+    this.renderGuide(infoContent)
     // render accelerators
-    const acclsInfo = document.createElement('div')
-    this.renderAccels(acclsInfo)
-    infoContent.appendChild(acclsInfo)
+    this.renderAccels(infoContent)
     // install IO
     this.io.install(host)
     // hide orca guide
@@ -62,75 +58,52 @@ function OrcaPlay () {
     this.io.start()
   }
 
-  this.renderGuide = (guideInfo) => {
-    const head = document.createElement('h2')
-    head.innerHTML = 'Operators'
-    guideInfo.appendChild(head)
-    const table = document.createElement('table')
-    table.classList.add('table')
-    guideInfo.appendChild(table)
-    const thead = document.createElement('thead')
-    table.appendChild(thead)
-    var row = document.createElement('tr')
-    thead.appendChild(row)
-    var col = document.createElement('th')
-    col.innerHTML = 'Operator'
-    row.appendChild(col)
-    col = document.createElement('th')
-    col.innerHTML = 'Description'
-    row.appendChild(col)
-    const tbody = document.createElement('tbody')
-    table.appendChild(tbody)
+  this.renderGuide = (infoContent) => {
+    const templ = document.querySelector("#info-table-template")
+    let clone = templ.content.cloneNode(true);
+    const templ_row = document.querySelector("#info-table-template-row")    
+    clone.querySelector("h2").textContent = 'Operators'
+    let th = clone.querySelectorAll("th");
+    th[0].textContent = 'Operator'
+    th[1].textContent = 'Description'
+    const cats = this.orcaClient.acels.sort()
+    let tbody = clone.querySelector("tbody");
     const operators = Object.keys(this.orcaClient.library).filter((val) => { return isNaN(val) })
     for (const id in operators) {
       const key = operators[id]
       const oper = new this.orcaClient.library[key]()
       const text = oper.info
-      row = document.createElement('tr')
-      tbody.appendChild(row)
-      col = document.createElement('td')
-      col.innerHTML = key
-      row.appendChild(col)
-      col = document.createElement('td')
-      col.innerHTML = text
-      row.appendChild(col)
+      let clone_row = templ_row.content.cloneNode(true);
+      let td = clone_row.querySelectorAll("td");
+      td[0].textContent = key
+      td[1].textContent = text
+      tbody.appendChild(clone_row)
     }
+    infoContent.appendChild(clone)
   }
 
-  this.renderAccels = (acclsInfo) => {
-    const head = document.createElement('h2')
-    head.innerHTML = 'Accelerators'
-    acclsInfo.appendChild(head)
-    const table = document.createElement('table')
-    table.classList.add('table')
-    acclsInfo.appendChild(table)
-    const thead = document.createElement('thead')
-    table.appendChild(thead)
-    var row = document.createElement('tr')
-    thead.appendChild(row)
-    var col = document.createElement('th')
-    col.innerHTML = 'Key'
-    row.appendChild(col)
-    col = document.createElement('th')
-    col.innerHTML = 'Function'
-    row.appendChild(col)
-    const tbody = document.createElement('tbody')
-    table.appendChild(tbody)
+  this.renderAccels = (infoContent) => {
+    const templ = document.querySelector("#info-table-template")
+    let clone = templ.content.cloneNode(true);
+    const templ_row = document.querySelector("#info-table-template-row")    
+    clone.querySelector("h2").textContent = 'Accelerators'
+    let th = clone.querySelectorAll("th");
+    th[0].textContent = 'Key'
+    th[1].textContent = 'Function'
     const cats = this.orcaClient.acels.sort()
+    let tbody = clone.querySelector("tbody");
     for (const cat in cats) {
       for (const item of cats[cat]) {
         if (item.accelerator) {
-          row = document.createElement('tr')
-          tbody.appendChild(row)
-          col = document.createElement('td')
-          col.innerHTML = item.accelerator.replace('`', 'tilde')
-          row.appendChild(col)
-          col = document.createElement('td')
-          col.innerHTML = item.name
-          row.appendChild(col)
+          let clone_row = templ_row.content.cloneNode(true);
+          let td = clone_row.querySelectorAll("td");
+          td[0].textContent = item.accelerator.replace('`', 'tilde')
+          td[1].textContent = item.name
+          tbody.appendChild(clone_row)
         }
       }
     }
+    infoContent.appendChild(clone)
   }
 
   this.addAccels = () => {

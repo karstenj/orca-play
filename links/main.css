@@ -102,14 +102,14 @@
   color: var(--f_med);
 }
 
-.table {
+.info-table {
   border: 2px solid var(--f_high);
   border-collapse: collapse;
 }
-.table tr {
+.info-table tr {
   border: 1px solid var(--f_high);
 }
 
-.table th {
+.info-table th {
   text-align: left;
 }
