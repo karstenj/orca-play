@@ -23,11 +23,20 @@
         </div>  
         <div id="info-body">
           <div id="info-content">
+            <h1>ORCΛ PLΛY</h1>  
+            <p>Welcome to ORCΛ PLΛY a combination of the famos Orca esoteric programming language and the Pilot synthesizer. 
+              This combination allows to run standalone Orca in a webbrowser without additional setup.</p>
+            <h2>Getting started</h2>
+            <p>Press CmdOrCtrl+R to load a random example</p>
             <template id="info-table-template-row">
               <tr><td></td><td></td></tr>
             </template>
+            <template id="info-table-template-row-group">
+              <tr><td colspan=2></td></tr>
+            </template>
             <template id="info-table-template">
               <div>
+                <hr>
                 <h2></h2>
                 <table class="info-table">
                   <thead><tr><th></th><th></th></tr></thead>
@@ -39,15 +48,13 @@
         </div>
       </div>
     </div>
-    <div id="orca" class="create">
+    <div id="orca" class="orca_shared_screen">
       <iframe id="orca-iframe" src="Orca/index.html"></iframe>
     </div>
 
-    <div id="pilot" class="create">
+    <div id="pilot" class="pilot_visible">
       <iframe id="pilot-iframe" src="Pilot/browser/index.html"></iframe>
     </div>
     <noscript>Your browser must have Javascript enabled to use Orca, <br />try running the <a href='https://git.sr.ht/~rabbits/orca'>terminal version</a> instead.</noscript>
-    <script type="text/javascript" src="scripts/io_wrapper.js"></script>
-    <script type="text/javascript" src="scripts/io_pilot.js"></script>
-    <script type="text/javascript" src="scripts/orca_play.js"></script>
+    <script type="module" src="scripts/orca_play.js"></script>
 </html>

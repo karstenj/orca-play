@@ -1,4 +1,7 @@
+import {orcaExamples} from './examples.js'
+import IOWrapper from './io_wrapper.js'
 'use strict'
+
 
 function OrcaPlay () {
   const { orcaClient, Operator } = document.getElementById('orca-iframe').contentWindow;
@@ -10,6 +13,7 @@ function OrcaPlay () {
   this.pilotClient = pilotClient
   this.io = new IOWrapper(this)
   this.guide = false
+  this.pilot = true
   const orcaPlay = this
 
   this.install = (host = document.body) => {
@@ -21,10 +25,6 @@ function OrcaPlay () {
     infoClose.addEventListener('click', () => {
       this.toggleGuide()
     })
-    // heading in info box
-    const head = document.createElement('h1')
-    head.innerHTML = 'ORCΛ PLΛY'
-    infoContent.appendChild(head)
     // render guide
     this.renderGuide(infoContent)
     // render accelerators
@@ -85,14 +85,19 @@ function OrcaPlay () {
   this.renderAccels = (infoContent) => {
     const templ = document.querySelector("#info-table-template")
     let clone = templ.content.cloneNode(true);
-    const templ_row = document.querySelector("#info-table-template-row")    
     clone.querySelector("h2").textContent = 'Accelerators'
     let th = clone.querySelectorAll("th");
     th[0].textContent = 'Key'
     th[1].textContent = 'Function'
     const cats = this.orcaClient.acels.sort()
+    const templ_row = document.querySelector("#info-table-template-row")    
+    const templ_row_group = document.querySelector("#info-table-template-row-group")    
     let tbody = clone.querySelector("tbody");
     for (const cat in cats) {
+      let clone_row = templ_row_group.content.cloneNode(true);
+      let td = clone_row.querySelector("td");
+      td.textContent = cat
+      tbody.appendChild(clone_row)
       for (const item of cats[cat]) {
         if (item.accelerator) {
           let clone_row = templ_row.content.cloneNode(true);
@@ -108,6 +113,8 @@ function OrcaPlay () {
 
   this.addAccels = () => {
     this.orcaClient.acels.set('View', 'Toggle Guide', 'CmdOrCtrl+G', () => { this.toggleGuide() })      
+    this.orcaClient.acels.set('View', 'Hide Pilot', 'CmdOrCtrl+H', () => { this.hidePilot() })
+    this.orcaClient.acels.set('File', 'Load Random Example', 'CmdOrCtrl+R', () => { this.randomExample() })
   }
 
   this.toggleGuide = () => {
@@ -120,6 +127,30 @@ function OrcaPlay () {
       infoContainer.classList.add('flex');        
     }
     this.guide = !this.guide
+  }
+
+  this.hidePilot = () => {
+    const pilot = document.getElementById('pilot');     
+    const orca = document.getElementById('orca');   
+    if (this.pilot) {
+      pilot.classList.add('hidden')
+      pilot.classList.remove('pilot_visible')
+      orca.classList.add('orca_full_screen')
+      orca.classList.remove('orca_shared_screen')
+    } else {
+      pilot.classList.remove('hidden')
+      pilot.classList.add('pilot_visible')
+      orca.classList.remove('orca_full_screen')
+      orca.classList.add('orca_shared_screen')
+    }
+    this.pilot = !this.pilot
+  }
+
+  this.randomExample = () => {
+    const keys = Object.keys(orcaExamples)
+    const key = keys[Math.floor(Math.random() * keys.length)];
+    console.log('Loading ' + key)
+    this.orcaClient.whenOpen(undefined, orcaExamples[key])
   }
 
   this.pilotNote = (command) => {

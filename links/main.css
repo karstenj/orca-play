@@ -6,7 +6,6 @@
   margin: 0px;
   max-width: 100%;
   height: 100%;
-  width: 85%;
   background: var(--background);
 }
 
@@ -25,7 +24,6 @@
   max-width: 20%;
   height: 100%;
   width: 16%;
-  display: inline;
 }
 
 #pilot > iframe {
@@ -92,6 +90,18 @@
 
 .hidden {
   display: none;
+}
+
+.pilot_visible {
+  display: inline;
+}
+
+.orca_full_screen {
+  width: 100%;
+}
+
+.orca_shared_screen {
+  width: 85%;
 }
 
 .icon:hover{

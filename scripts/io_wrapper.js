@@ -1,4 +1,6 @@
-function IOWrapper (orcaPlay) {
+import IOPilot from './io_pilot.js'
+
+export default function IOWrapper (orcaPlay) {
     this.io_pilot = new IOPilot(orcaPlay)
 
     orcaPlay.orcaClient.io.run_old = orcaPlay.orcaClient.io.run

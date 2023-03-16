@@ -1,4 +1,4 @@
-function IOPilot (orcaPlay) {
+export default function IOPilot (orcaPlay) {
     this.stack_note = []
     this.stack_effect = []
 
