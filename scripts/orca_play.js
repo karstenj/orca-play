@@ -147,6 +147,9 @@ function OrcaPlay () {
   }
 
   this.randomExample = () => {
+    if (this.guide) {
+      this.toggleGuide();
+    }
     const keys = Object.keys(orcaExamples)
     const key = keys[Math.floor(Math.random() * keys.length)];
     console.log('Loading ' + key)

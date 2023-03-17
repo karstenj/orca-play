@@ -21,6 +21,6 @@ if __name__ == '__main__':
             ret[name] = contents
 
     json_string = json.dumps(ret)
-    output = "export default orcaExamples = " + json_string
+    output = "export const orcaExamples = " + json_string
     with open('scripts/examples.js', 'w') as fp:
         fp.write(output)
