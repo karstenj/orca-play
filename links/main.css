@@ -1,19 +1,12 @@
-#orca.create {
-  top: 0px;
-  max-width: 85%;
-  width: 85%;
-  height: 100%;
-}
-
 #orca {
   position: fixed;
   top: 0px;
   left: 0px;
   padding: 0px;
   margin: 0px;
-  max-width: 85%;
+  max-width: 100%;
   height: 100%;
-  width: 85%;
+  background: var(--background);
 }
 
 #orca > iframe {
@@ -24,19 +17,109 @@
 
 #pilot {
   position: fixed;
-  bottom: 0px;
+  top: 0px;
   right: 0px;
   padding: 0px;
   margin: 0px;
-  max-width: 15%;
+  max-width: 20%;
   height: 100%;
-  width: 15%;
-  margin: auto;
-  display: inline;
+  width: 16%;
 }
 
 #pilot > iframe {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+#info-container {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+  align-items: center;
+  justify-content: center;
+  transition: height 1s;
+}
+
+#info-container.flex {
+  display: flex;
+}
+
+#info {
+  width: 70%;
+  height: 70%;
+  min-width: 800px;
+  min-height: 300px;
+  background: var(--background);
+  border: 1px solid var(--f_high);
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  flex-flow: column;
+  transition: width 1s;
+}
+
+#info-header {
+  width: 100%;
+  border: 1px solid var(--f_high);
+  margin: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#info-body {
+  width: 100%;
+  /* height: 100%; */
+  flex: 1;
+  overflow-y: auto;
+  color: white;
+}
+
+#info-content {
+  margin-left: 65px;
+  margin-right: 65px;
+}
+
+#info-close {
+  margin-left: auto; 
+  margin-right: 0;  
+}
+
+.hidden {
+  display: none;
+}
+
+.pilot_visible {
+  display: inline;
+}
+
+.orca_full_screen {
+  width: 100%;
+}
+
+.orca_shared_screen {
+  width: 85%;
+}
+
+.icon:hover{
+  cursor: pointer;
+}
+
+.icon:hover{
+  color: var(--f_med);
+}
+
+.info-table {
+  border: 2px solid var(--f_high);
+  border-collapse: collapse;
+}
+.info-table tr {
+  border: 1px solid var(--f_high);
+}
+
+.info-table th {
+  text-align: left;
 }
