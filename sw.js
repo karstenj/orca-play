@@ -24,11 +24,9 @@ const assets = [
   './Orca/desktop/sources/scripts/commander.js',
   './Orca/desktop/sources/scripts/cursor.js',
   './Orca/desktop/sources/scripts/client.js',
-  './scripts//lib/tone.js',
-  './scripts/kit.js',
-  './scripts/knob.js',
-  './scripts/mixer.js',
-  './scripts/rack.js',
+  './scripts/examples.js',
+  './scripts/io_wrapper.js',
+  './scripts/io_pilot.js',
   './scripts/orca_play.js'
 ]
 
