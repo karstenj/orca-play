@@ -1,4 +1,5 @@
 import {orcaExamples} from './examples.js'
+import Share from './share.js'
 import IOWrapper from './io_wrapper.js'
 'use strict'
 
@@ -12,6 +13,7 @@ function OrcaPlay () {
   this.orcaClient.toggleGuide(false);    
   this.pilotClient = pilotClient
   this.io = new IOWrapper(this)
+  this.share = new Share()
   this.guide = false
   this.pilot = true
   const orcaPlay = this
@@ -38,6 +40,15 @@ function OrcaPlay () {
     host.addEventListener('keyup', this.orcaClient.acels.onKeyUp, false)  
     // add theme element
     host.appendChild(this.orcaClient.theme.el)
+    // read code from URL
+    this.share.initCode().then((code) => {
+      if (code) {
+        this.orcaClient.whenOpen(undefined, code)
+        this.toggleGuide()
+        this.orcaClient.cursor.select(0, 0, 0, 0)
+      }
+    })
+    // set cursor
     // add pilot command handler
     this.orcaClient.commander.actives["note"] = (p) => {
       this.pilotNote(p.str)
@@ -115,6 +126,7 @@ function OrcaPlay () {
     this.orcaClient.acels.set('View', 'Toggle Guide', 'CmdOrCtrl+G', () => { this.toggleGuide() })      
     this.orcaClient.acels.set('View', 'Hide Pilot', 'CmdOrCtrl+H', () => { this.hidePilot() })
     this.orcaClient.acels.set('File', 'Load Random Example', 'CmdOrCtrl+R', () => { this.randomExample() })
+    this.orcaClient.acels.set('File', 'Share Link', 'CmdOrCtrl+#', () => { this.shareLink() })
   }
 
   this.toggleGuide = () => {
@@ -154,6 +166,10 @@ function OrcaPlay () {
     const key = keys[Math.floor(Math.random() * keys.length)];
     console.log('Loading ' + key)
     this.orcaClient.whenOpen(undefined, orcaExamples[key])
+  }
+
+  this.shareLink = () => {
+    this.share.handleShare(`${this.orcaClient.orca}`)
   }
 
   this.pilotNote = (command) => {
