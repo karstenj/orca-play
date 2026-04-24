@@ -11,7 +11,6 @@ function OrcaPlay() {
   this.pilotClient = pilotClient
   this.io = new IOWrapper(this)
   this.share = new Share()
-  this.guide = false
   this.pilot = true
 
   const isMac = navigator.platform.match(/^(?:Mac|iP)/)
@@ -34,7 +33,7 @@ function OrcaPlay() {
     this.share.initCode().then((code) => {
       if (code) {
         orca.whenOpen(undefined, code)
-        this.toggleGuide()
+        orca.toggleGuide(false)
         orca.cursor.select(0, 0, 0, 0)
       }
     })
@@ -148,8 +147,8 @@ function OrcaPlay() {
   }
 
   this.randomExample = () => {
-    if (this.guide) {
-      this.toggleGuide();
+    if (orca.guide) {
+      orca.toggleGuide(false)
     }
     const keys = Object.keys(orcaExamples)
     const key = keys[Math.floor(Math.random() * keys.length)];
