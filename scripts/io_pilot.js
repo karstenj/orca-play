@@ -23,7 +23,7 @@ export default function IOPilot (orcaPlay) {
         this.stack_effect = []
     }
 
-    this.install = (host) => {
+    this.install = (_host) => {
 
     }
 

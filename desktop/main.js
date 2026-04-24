@@ -90,7 +90,7 @@ app.toggleVisible = function () {
 app.injectMenu = function (menu) {
   try {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menu))
-  } catch (err) {
+  } catch (_err) {
     console.warn('Cannot inject menu.')
   }
 }

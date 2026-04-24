@@ -168,7 +168,7 @@ function OrcaPlay() {
     this.pilotClient.mixer.run_effect(command)
   }
 
-  orcaClient.library[';'] = function OperatorPilotNote(orca, x, y, passive) {
+  orcaClient.library[';'] = function OperatorPilotNote(orca, x, y, _passive) {
     Operator.call(this, orca, x, y, ';', true)
 
     this.name = 'pilot synth'
@@ -194,7 +194,7 @@ function OrcaPlay() {
       }
     }
   }
-  orcaClient.library['='] = function OperatorPilotEffect(orca, x, y, passive) {
+  orcaClient.library['='] = function OperatorPilotEffect(orca, x, y, _passive) {
     Operator.call(this, orca, x, y, ';', true)
 
     this.name = 'pilot effect/drum'
