@@ -1,9 +1,8 @@
 'use strict'
 
-/* global createWindow */
-
-const { app, BrowserWindow, Menu, protocol } = require('electron')
+const { app, BrowserWindow, Menu, protocol, net } = require('electron')
 const path = require('path')
+const { pathToFileURL } = require('url')
 
 let isShown = true
 
@@ -18,11 +17,12 @@ protocol.registerSchemesAsPrivileged([{
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
 
-app.on('ready', () => {
+app.whenReady().then(() => {
   // Serve the project root via app://app/
-  protocol.registerFileProtocol('app', (request, callback) => {
+  protocol.handle('app', (request) => {
     const filePath = request.url.replace(/^app:\/\/app/, '')
-    callback({ path: path.normalize(path.join(__dirname, '..', filePath)) })
+    const absolutePath = path.normalize(path.join(__dirname, '..', filePath))
+    return net.fetch(pathToFileURL(absolutePath).toString())
   })
 
   app.win = new BrowserWindow({
@@ -36,23 +36,23 @@ app.on('ready', () => {
     frame: process.platform !== 'darwin',
     skipTaskbar: process.platform === 'darwin',
     autoHideMenuBar: process.platform === 'darwin',
-    webPreferences: { zoomFactor: 1.0, nodeIntegration: true, backgroundThrottling: false }
+    webPreferences: {
+      zoomFactor: 1.0,
+      nodeIntegration: true,
+      contextIsolation: false,
+      backgroundThrottling: false
+    }
   })
 
   app.win.loadURL('app://app/desktop/index.html')
-  // app.inspect()
+  // app.win.webContents.openDevTools()
 
   app.win.on('closed', () => {
     app.quit()
   })
 
-  app.win.on('hide', function () {
-    isShown = false
-  })
-
-  app.win.on('show', function () {
-    isShown = true
-  })
+  app.win.on('hide', () => { isShown = false })
+  app.win.on('show', () => { isShown = true })
 
   app.on('window-all-closed', () => {
     app.quit()
@@ -60,7 +60,7 @@ app.on('ready', () => {
 
   app.on('activate', () => {
     if (app.win === null) {
-      createWindow()
+      app.win.show()
     } else {
       app.win.show()
     }
