@@ -7,7 +7,7 @@
     "lint": "eslint scripts/ desktop/main.js"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "eslint": "^9.0.0"
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.0.0"
   }
 }
